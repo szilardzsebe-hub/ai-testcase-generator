@@ -1,12 +1,7 @@
-output/*.json
-output/*.xlsx
-
-*.json
-*.xlsx
-~$*.xlsx
-
+echo ".venv/
 __pycache__/
 *.pyc
-
-.venv/
-venv/
+*.xlsx
+*.png
+~$*
+" > .gitignore
