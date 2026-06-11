@@ -87,4 +87,8 @@ python main.py
 
 ## Author
 
-QA Engineer transitioning into Test Automation & AI-assisted QA tooling.
+Zsebe Szilard, QA Engineer transitioning into Test Automation & AI-assisted QA tooling.
+
+## ## Sample Output
+
+![Excel Output](screenshots/excel_output.png)
