@@ -51,8 +51,12 @@ User can reset password using email
 ## Project Structure
 
 ```
-AI_Assisted_Test_Case_Generator/
+
+ai-testcase-generator/
 │
+├── .gitignore
+├── README.md
+├── requirements.txt
 ├── main.py
 ├── generator.py
 ├── models.py
