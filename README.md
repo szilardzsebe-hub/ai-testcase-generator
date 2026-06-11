@@ -54,14 +54,15 @@ User can reset password using email
 
 ai-testcase-generator/
 │
-├── .gitignore
 ├── README.md
+├── .gitignore
 ├── requirements.txt
 ├── main.py
 ├── generator.py
 ├── models.py
 ├── excel_exporter.py
-└── output/
+├── output/
+└── screenshots/
 ```
 
 ---
