@@ -1,6 +1,10 @@
 output/*.json
 output/*.xlsx
 
+*.json
+*.xlsx
+~$*.xlsx
+
 __pycache__/
 *.pyc
 
