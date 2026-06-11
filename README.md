@@ -89,6 +89,6 @@ python main.py
 
 Zsebe Szilard, QA Engineer transitioning into Test Automation & AI-assisted QA tooling.
 
-## ## Sample Output
+## Sample Output
 
 ![Excel Output](screenshots/excel_output.png)
