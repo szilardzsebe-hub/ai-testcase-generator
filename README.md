@@ -144,9 +144,9 @@ During development several real-world issues were identified and resolved.
 ## 1. Excel Export Permission Error
 
 ## Issue
-
+```
 PermissionError: [Errno 13] Permission denied
-
+```
 ## Root Cause
 
 The Excel file was open while the script attempted to overwrite it.
@@ -170,7 +170,7 @@ Observed:
 Missing TC-004
 
 Example:
-
+```
 TC-001
 TC-002
 TC-003
@@ -180,7 +180,7 @@ TC-007
 TC-008
 TC-009
 TC-010
-
+```
 ## Investigation
 
 The issue initially appeared to be an incorrect number of generated test cases.
@@ -200,7 +200,7 @@ ID generation was tightly coupled with test case creation.
 Introduced a dedicated ID assignment layer.
 
 Current flow:
-
+```
 Generate Test Cases
         ↓
 Assign IDs
@@ -208,7 +208,7 @@ Assign IDs
 Save to SQLite
         ↓
 Export Results
-
+```
 This separation improves maintainability and prepares the project for future AI-generated test cases.
 
 ## 4. SQLite Cache Validation
@@ -216,7 +216,7 @@ This separation improves maintainability and prepares the project for future AI-
 Implemented requirement caching to avoid regenerating identical requirements.
 
 Workflow:
-
+```
 Requirement
       ↓
 Check SQLite Cache
@@ -226,7 +226,7 @@ Found?
  └─ No  → Generate New Test Cases
               ↓
           Save to Database
-
+```
 Benefits:
 
 * Faster execution
@@ -237,20 +237,20 @@ Benefits:
 ## Issue
 
 Requirements containing both:
-
+```
 login
 password
-
+```
 were incorrectly classified as password-reset requirements.
 
 Example:
-
+```
 User can login with username and password
-
+```
 was matching:
-
+```
 if "password" in requirement
-
+```
 before the login condition.
 
 ## Resolution
@@ -287,8 +287,9 @@ AI_Assisted_Test_Case_Generator/
 └── screenshots/
 ```
 ## How to Run
+```
 python src/main.py
-
+```
 ## Future Improvements
 * AI/LLM-based test case generation
 * Requirement quality analysis
