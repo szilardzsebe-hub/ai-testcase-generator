@@ -132,9 +132,12 @@ User can reset password using email
 ## Example Output
 ID	Type	Description	Expected Result
 ---
-TC-001	Positive	Verify password reset with valid email	Password reset email is sent
-TC-002	Negative	Verify password reset with non-existing email	Error message displayed
-TC-003	Boundary	Verify password reset with maximum email length	Request handled correctly
+| ID     | Type     | Description                                 | Expected Result            |
+| ------ | -------- | ------------------------------------------- | -------------------------- |
+| TC-001 | Positive | Verify password reset with valid email      | Email is sent successfully |
+| TC-002 | Negative | Verify password reset with invalid email    | Error message displayed    |
+| TC-003 | Boundary | Verify password reset with max email length | System handles input       |
+
 
 ---
 ## Debugging & Development Journey
