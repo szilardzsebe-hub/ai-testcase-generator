@@ -308,4 +308,5 @@ python src/main.py
 ## Szilard Zsebe
 QA Engineer transitioning into Test Automation and AI-Assisted QA Engineering.
 
-Sample Output
+## Sample Output
+![Excel Output](screenshots/excel_output_9TC)
