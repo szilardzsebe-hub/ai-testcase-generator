@@ -309,4 +309,5 @@ python src/main.py
 QA Engineer transitioning into Test Automation and AI-Assisted QA Engineering.
 
 ## Sample Output
-(screenshots/excel_output_9TC)
+
+![Excel Output](screenshots/excel_output_9TC)
