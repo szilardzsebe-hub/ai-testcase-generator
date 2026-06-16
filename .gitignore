@@ -1,7 +1,13 @@
-echo ".venv/
+# Python
 __pycache__/
 *.pyc
-*.xlsx
-*.png
-~$*
-" > .gitignore
+
+# Virtual env
+.venv/
+
+# Generated outputs
+test_cases.xlsx
+test_cases.json
+
+# Database
+data/tc.db

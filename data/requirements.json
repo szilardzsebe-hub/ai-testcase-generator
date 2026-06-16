@@ -1,0 +1,5 @@
+[
+    "User can login with username and password",
+    "User can reset password using email",
+    "User can register a new account"
+]
