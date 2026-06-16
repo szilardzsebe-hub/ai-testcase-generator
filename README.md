@@ -162,13 +162,13 @@ Closed the workbook before export and verified file locking behavior.
 ## Issue
 
 Expected:
-
+```
 9 test cases
-
+```
 Observed:
-
+```
 Missing TC-004
-
+```
 Example:
 ```
 TC-001
