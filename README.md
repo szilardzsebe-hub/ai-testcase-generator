@@ -267,7 +267,7 @@ Pathlib
 ---
 
 ## Project Structure
-
+```
 AI_Assisted_Test_Case_Generator/
 │
 ├── data/
@@ -285,6 +285,7 @@ AI_Assisted_Test_Case_Generator/
 ├── test_cases.xlsx
 ├── README.md
 └── screenshots/
+```
 ## How to Run
 python src/main.py
 
