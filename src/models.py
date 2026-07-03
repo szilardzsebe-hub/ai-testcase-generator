@@ -12,3 +12,9 @@ class TestCase:
             "description": self.description,
             "expected_result": self.expected_result
         }
+class RequirementAnalysis:
+    def __init__(self, category, risks, validations, keywords):
+        self.category = category
+        self.risks = risks
+        self.validations = validations
+        self.keywords = keywords
