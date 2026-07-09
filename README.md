@@ -402,3 +402,20 @@ QA Engineer transitioning into Test Automation and AI-Assisted QA Engineering.
 * PDF report generation
 * Test coverage dashboard
 
+## Screenshots
+
+### Console Output
+
+![Console](screenshots/console_output.png)
+
+### Excel Export
+
+![Excel](screenshots/excel_output_V1_3.png)
+
+### Requirement Analysis Report
+
+![Analysis](screenshots/Requirement_Analysis_Report.png)
+
+### Coverage Report
+
+![Coverage](screenshots/Coverage_report.png)
