@@ -1,35 +1,91 @@
 from models import TestCase
 from requirement_analyzer import analyze_requirement
+from risk_templates import RISK_TEMPLATES
+from validation_templates import VALIDATION_TEMPLATES
+from positive_templates import POSITIVE_TEMPLATES
+from models import TestCase
 
 
+def generate_positive_tests(analysis):
+
+    if analysis.category not in POSITIVE_TEMPLATES:
+        return []
+
+    tc_type, description, expected = POSITIVE_TEMPLATES[analysis.category]
+
+    return [
+        TestCase(
+            None,
+            tc_type,
+            description,
+            expected
+        )
+    ]
+def generate_risk_tests(analysis):
+
+    tests = []
+
+    for risk in analysis.risks:
+
+        if risk in RISK_TEMPLATES:
+
+            tc_type, description, expected = RISK_TEMPLATES[risk]
+
+            tests.append(
+                TestCase(
+                    None,
+                    tc_type,
+                    description,
+                    expected
+                )
+            )
+
+    return tests
+def generate_validation_tests(analysis):
+
+    tests = []
+
+    for validation in analysis.validations:
+
+        if validation in VALIDATION_TEMPLATES:
+
+            tc_type, description, expected = VALIDATION_TEMPLATES[validation]
+
+            tests.append(
+                TestCase(
+                    None,
+                    tc_type,
+                    description,
+                    expected
+                )
+            )
+
+    return tests
+def generate_boundary_tests(analysis):
+
+    if analysis.category == "LOGIN":
+
+        return [
+            TestCase(
+                None,
+                "Boundary",
+                "Verify login with maximum username length",
+                "Request handled correctly"
+            )
+        ]
+
+    return []
 
 def generate_test_cases(requirement):
 
     analysis = analyze_requirement(requirement)
-    
 
-    if analysis.category == "PASSWORD_RESET":
-        return [
-            TestCase(None, "Positive", "Verify password reset with valid email", "Password reset email is sent"),
-            TestCase(None, "Negative", "Verify password reset with non-existing email", "Error message displayed"),
-            TestCase(None, "Boundary", "Verify password reset with maximum email length", "Request handled correctly")
-        ]
+    test_cases = []
 
-    elif analysis.category == "LOGIN":
-        return [
-            TestCase(None, "Positive", "Verify login with valid email", "User is logged in successfully"),
-            TestCase(None, "Negative", "Verify login with invalid email", "Error message displayed"),
-            TestCase(None, "Boundary", "Verify login with maximum email length", "Request handled correctly")
-        ]
+    test_cases.extend(generate_positive_tests(analysis))
+    test_cases.extend(generate_risk_tests(analysis))
+    test_cases.extend(generate_validation_tests(analysis))
+    test_cases.extend(generate_boundary_tests(analysis))
 
-    elif analysis.category == "REGISTRATION":
-        return [
-            TestCase(None, "Positive", "Verify registration with valid email", "User is registered successfully"),
-            TestCase(None, "Negative", "Verify registration with invalid email", "Error message displayed"),
-            TestCase(None, "Boundary", "Verify registration with maximum email length", "Request handled correctly")
-        ]
-
-    else:
-        return [
-            TestCase(None, "Positive", f"Verify successful flow for: {requirement}", "System behaves as expected")
-        ]
+    return test_cases
+ 

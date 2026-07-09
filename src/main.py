@@ -1,42 +1,46 @@
 
 import json
-from generator import generate_test_cases
 from excel_exporter import export_to_excel
-from tc_id_service import init_db
-from pathlib import Path
+from tc_id_service import init_db, get_or_generate_test_cases
 from requirement_analyzer import analyze_requirement
 from analysis_report import create_analysis_report
+from coverage_report import create_coverage_report
 
+from analysis_report import (
+    initialize_analysis_report,
+    create_analysis_report
+)
+from config import (
+    REQUIREMENTS_FILE,
+    TEST_CASES_JSON,
+    TEST_CASES_EXCEL,
+    ANALYSIS_REPORT_FILE
+)
 
 
 
 init_db()
-BASE_DIR = Path(__file__).resolve().parent.parent
 
-OUTPUT_DIR = BASE_DIR / "output"
-OUTPUT_DIR.mkdir(exist_ok=True)
-report = OUTPUT_DIR / "analysis_report.md"
+initialize_analysis_report()
 
-if report.exists():
-    report.unlink()
 
-requirements_path = BASE_DIR / "data" / "requirements.json"
 
-with open(requirements_path, "r", encoding="utf-8") as file:
+
+with open(REQUIREMENTS_FILE, "r", encoding="utf-8") as file:
     requirements = json.load(file)
 
-all_test_cases = []
 
-for requirement in requirements:
+all_test_cases = []
+analyses = []
+
+for index, requirement in enumerate(requirements, start=1):
 
     analysis = analyze_requirement(requirement)
-    create_analysis_report(requirement, analysis)
-
-    from tc_id_service import get_or_generate_test_cases
-
+    analyses.append(analysis)
+    create_analysis_report(requirement, analysis,index)
     test_cases = get_or_generate_test_cases(requirement)
     all_test_cases.extend(test_cases)
-
+    
 
 
 for tc in all_test_cases:
@@ -49,14 +53,18 @@ for tc in all_test_cases:
 
 output = [tc.to_dict() for tc in all_test_cases]
 
-json_path = OUTPUT_DIR / "test_cases.json"
-with open(json_path, "w", encoding="utf-8") as file:
+
+with open(TEST_CASES_JSON, "w", encoding="utf-8") as file:
     json.dump(output, file, indent=4)
-
-excel_path = OUTPUT_DIR / "test_cases.xlsx"
-export_to_excel(all_test_cases, excel_path)
-
+   
 print(f"Total test cases generated: {len(all_test_cases)}")
 print(f"\nTest cases saved to:")
-print(f"  - JSON: {json_path}")
-print(f"  - Excel: {excel_path}")
+print(f"  - JSON: {TEST_CASES_JSON}")
+print(f"  - Excel: {TEST_CASES_EXCEL}")
+
+create_coverage_report(
+    requirements,
+    analyses,
+    all_test_cases
+)
+export_to_excel(all_test_cases, TEST_CASES_EXCEL)

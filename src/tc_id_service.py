@@ -1,81 +1,55 @@
 import sqlite3
 
-from pathlib import Path
 from models import TestCase
 
-DB_PATH = Path(__file__).resolve().parent.parent / "data" / "tc.db"
+from config import DATABASE_FILE
 
 
 
 
 def init_db():
-   
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cur = conn.cursor()
 
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS tc_counter (
-        id INTEGER PRIMARY KEY CHECK (id = 1),
-        value INTEGER NOT NULL
-    )
-    """)
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS tc_counter (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            value INTEGER NOT NULL
+        )
+        """)
 
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS generated_testcases (
-        requirement TEXT,
-        tc_id TEXT,
-        tc_type TEXT,
-        description TEXT,
-        expected_result TEXT
-    )
-    """)
-    
- 
+        cur.execute("""
+        CREATE TABLE IF NOT EXISTS generated_testcases (
+            requirement TEXT,
+            tc_id TEXT,
+            tc_type TEXT,
+            description TEXT,
+            expected_result TEXT
+        )
+        """)
 
-    cur.execute(
-        "INSERT OR IGNORE INTO tc_counter (id, value) VALUES (1, 0)"
-    )
+        cur.execute("""
+            INSERT OR IGNORE INTO tc_counter (id, value)
+            VALUES (1, 0)
+        """)
 
-    conn.commit()
-    conn.close()
-
-
-def next_tc_id():
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-
-    cur.execute("SELECT value FROM tc_counter WHERE id = 1")
-    current = cur.fetchone()[0]
-
-    next_value = current + 1
-
-    cur.execute(
-        "UPDATE tc_counter SET value = ? WHERE id = 1",
-        (next_value,)
-    )
-
-    conn.commit()
-    conn.close()
-
-    return f"TC-{next_value:03d}"
-
+        conn.commit()
 
 def get_existing_test_cases(requirement):
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
 
-    normalized = requirement.strip().lower()
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cur = conn.cursor()
 
-    cur.execute("""
-        SELECT tc_id, tc_type, description, expected_result
-        FROM generated_testcases
-        WHERE requirement = ?
-        ORDER BY tc_id
-    """, (normalized,))
+        normalized = requirement.strip().lower()
 
-    rows = cur.fetchall()
+        cur.execute("""
+            SELECT tc_id, tc_type, description, expected_result
+            FROM generated_testcases
+            WHERE requirement = ?
+            ORDER BY tc_id
+        """, (normalized,))
 
-    conn.close()
+        rows = cur.fetchall()
 
     return [
         TestCase(
@@ -85,34 +59,40 @@ def get_existing_test_cases(requirement):
             expected_result
         )
         for tc_id, tc_type, description, expected_result in rows
+         
     ]
 
 def save_test_cases(requirement, test_cases):
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
 
-    normalized = requirement.strip().lower()
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cur = conn.cursor()
 
-    for tc in test_cases:
-        cur.execute("""
-            INSERT INTO generated_testcases (
-                requirement,
-                tc_id,
-                tc_type,
-                description,
-                expected_result
+        normalized = requirement.strip().lower()
+
+        for tc in test_cases:
+            cur.execute(
+                """
+                INSERT INTO generated_testcases (
+                    requirement,
+                    tc_id,
+                    tc_type,
+                    description,
+                    expected_result
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    normalized,
+                    tc.tc_id,
+                    tc.tc_type,
+                    tc.description,
+                    tc.expected_result,
+                ),
             )
-            VALUES (?, ?, ?, ?, ?)
-        """, (
-            normalized,
-            tc.tc_id,
-            tc.tc_type,
-            tc.description,
-            tc.expected_result
-        ))
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+
+ 
 
 def get_or_generate_test_cases(requirement):
 
@@ -132,21 +112,29 @@ def get_or_generate_test_cases(requirement):
 
     return generated
 def reserve_tc_ids(n):
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
 
-    cur.execute("SELECT value FROM tc_counter WHERE id = 1")
-    current = cur.fetchone()[0]
+    with sqlite3.connect(DATABASE_FILE) as conn:
+        cur = conn.cursor()
 
-    start = current + 1
-    end = current + n
+        cur.execute("SELECT value FROM tc_counter WHERE id = 1")
+        current = cur.fetchone()[0]
 
-    cur.execute("UPDATE tc_counter SET value = ? WHERE id = 1", (end,))
+        start = current + 1
+        end = current + n
 
-    conn.commit()
-    conn.close()
+        cur.execute(
+            "UPDATE tc_counter SET value = ? WHERE id = 1",
+            (end,)
+        )
 
-    return [f"TC-{i:03d}" for i in range(start, end + 1)]
+        conn.commit()
+
+    return [
+        f"TC-{i:03d}"
+        for i in range(start, end + 1)
+    ]
+
+  
 def assign_ids(test_cases):
     ids = reserve_tc_ids(len(test_cases))
 

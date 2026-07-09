@@ -25,14 +25,14 @@ def analyze_requirement(requirement):
             category="PASSWORD_RESET",
             keywords=["password", "email", "reset"],
             risks=[
-                "Invalid email",
+                "Non-existing email",
                 "Expired reset link",
-                "Empty email"
+                "Invalid reset token"
             ],
             validations=[
                 "Email required",
-                "Email format",
-                "Maximum email length"
+                "Valid email format"
+                
             ]
         )
 
@@ -48,7 +48,7 @@ def analyze_requirement(requirement):
             validations=[
                 "Email required",
                 "Password strength",
-                "Email format"
+                "Username required"
             ]
         )
 
