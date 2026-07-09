@@ -13,3 +13,4 @@ test_cases.json
 data/tc.db
 #Output
 output/
+database/*.db
