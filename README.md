@@ -310,4 +310,95 @@ QA Engineer transitioning into Test Automation and AI-Assisted QA Engineering.
 
 ## Sample Output
 
-![Excel Output](screenshots/excel_output_9TC)
+## Version History
+
+# Version 1.2 – Persistent Test Case Management
+
+### 🚀 Highlights
+
+* Introduced SQLite database support.
+* Added persistent storage for generated test cases.
+* Implemented automatic sequential Test Case ID generation.
+* Added cached test case retrieval to avoid duplicate generation.
+* Created a dedicated database service (`tc_id_service.py`).
+* Improved modular architecture by separating database logic.
+* Enhanced JSON and Excel export workflow.
+
+### Database Features
+
+* Persistent storage of generated test cases.
+* Automatic Test Case ID management.
+* Requirement-based caching.
+* Reuse of previously generated test cases.
+
+---
+
+# Version 1.3 – Smart Test Generation
+
+### 🚀 Highlights
+
+* Introduced a smart template-based test generation engine.
+* Replaced hardcoded test case generation with reusable template modules.
+* Test cases are dynamically generated based on Requirement Analysis.
+* Added dedicated template modules:
+
+  * Positive Templates
+  * Risk Templates
+  * Validation Templates
+  * Boundary Templates
+* Added **Requirement Analysis Report** generation.
+* Added **Coverage Report** generation.
+* Centralized project configuration using `config.py`.
+* Improved project structure and code organization.
+* Refactored SQLite access using context managers (`with sqlite3.connect(...)`).
+* Improved maintainability and readability.
+
+### Generated Outputs
+
+* Requirement Analysis Report (.md)
+* Coverage Report (.md)
+* JSON Export
+* Excel Export
+
+---
+
+# Current Features
+
+* ✅ Requirement categorization
+* ✅ Keyword extraction
+* ✅ Risk identification
+* ✅ Validation detection
+* ✅ Smart template-based test case generation
+* ✅ Positive test generation
+* ✅ Negative test generation
+* ✅ Boundary test generation
+* ✅ SQLite-backed caching
+* ✅ Automatic Test Case ID generation
+* ✅ Requirement Analysis Report
+* ✅ Coverage Report
+* ✅ JSON export
+* ✅ Excel export
+* ✅ Modular project architecture
+
+---
+
+# Roadmap
+
+## Version 1.4 (Planned)
+
+* Rule-based Smart Test Case Engine
+* Context-aware test generation
+* Multiple scenario generation from a single requirement
+* Improved requirement parsing
+* Higher test coverage through rule combinations
+
+## Future Improvements
+
+* AI/LLM-assisted test generation
+* Import requirements from JSON, CSV and Excel
+* REST API
+* Web interface
+* Jira/Xray integration
+* PDF report generation
+* Test coverage dashboard
+
