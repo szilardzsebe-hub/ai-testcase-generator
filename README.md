@@ -638,18 +638,3 @@ src/
 
 ---
 
-# Suggested Git Commit
-
-```text
-feat(v1.4): introduce TestCase Builder, Template Registry and enterprise reporting
-
-- Added centralized TestCase Builder
-- Introduced Template Registry
-- Added RequirementCategory support
-- Redesigned Excel exporter
-- Extended JSON export
-- Improved SQLite persistence
-- Expanded Coverage Report
-- Refactored project architecture
-```
-
