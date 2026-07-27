@@ -419,3 +419,222 @@ QA Engineer transitioning into Test Automation and AI-Assisted QA Engineering.
 ### Coverage Report
 
 ![Coverage](screenshots/Coverage_report.png)
+
+
+# AI-Assisted Test Case Generator
+
+# Version 1.4 Update
+
+## Overview
+
+Version 1.4 introduces a significant architectural refactoring of the project. The focus of this release was not only to add new functionality, but also to improve maintainability, scalability, and prepare the application for future enterprise features.
+
+---
+
+# ✨ New Features
+
+## Test Case Builder
+
+Introduced a dedicated **Test Case Builder** responsible for creating TestCase objects.
+
+### Benefits
+
+* Centralized TestCase creation
+* Eliminates duplicated object construction
+* Simplifies future enhancements
+* Improves code readability
+* Supports enterprise-scale architecture
+
+---
+
+## Template Registry
+
+Added a centralized **Template Registry** responsible for loading reusable templates based on the detected requirement category.
+
+Currently supported templates:
+
+* Login Preconditions
+* Login Test Data
+* Login Steps
+* Login Postconditions
+
+### Benefits
+
+* Decouples template selection from the generator
+* Improves maintainability
+* Simplifies onboarding of new business flows
+* Makes future extensions significantly easier
+
+---
+
+## Requirement Categories
+
+Implemented a dedicated `RequirementCategory` enumeration.
+
+Currently supported categories:
+
+* LOGIN
+* REGISTRATION
+* PASSWORD_RESET
+
+Requirement categories are now used throughout the project to select reusable templates and business-flow-specific logic.
+
+---
+
+## Enterprise Excel Export
+
+The Excel exporter has been completely redesigned.
+
+### New capabilities
+
+* Professional formatting
+* Styled header row
+* Automatic column sizing
+* Wrapped multi-line cells
+* Frozen header row
+* Auto filters
+* Cell borders
+* Enterprise-friendly layout
+
+### Exported attributes
+
+* Test Case ID
+* Title
+* Requirement
+* Category
+* Test Type
+* Priority
+* Preconditions
+* Test Data
+* Steps
+* Expected Result
+* Postconditions
+* Automation Candidate
+* Tags
+
+The generated Excel document is intended for QA Engineers, Test Managers, Business Analysts, and project stakeholders.
+
+---
+
+## JSON Export Improvements
+
+Extended the JSON export to support the complete enterprise Test Case model.
+
+The JSON output now includes:
+
+* Requirement
+* Category
+* Priority
+* Preconditions
+* Test Data
+* Steps
+* Postconditions
+* Automation Candidate
+* Tags
+
+This creates a foundation for future integrations with:
+
+* Jira
+* Xray
+* Azure DevOps
+* TestRail
+* REST APIs
+
+---
+
+## SQLite Improvements
+
+Extended the persistence layer to store the complete TestCase model.
+
+Additional information is now persisted, including:
+
+* Requirement
+* Category
+* Preconditions
+* Test Data
+* Steps
+* Postconditions
+* Automation Candidate
+* Tags
+
+This enables future reporting and analytics features.
+
+---
+
+## Coverage Report Improvements
+
+The Coverage Report has been expanded.
+
+The report now includes:
+
+* Total requirements analyzed
+* Requirement coverage
+* Requirement categories
+* Generated test case count
+* Test type statistics
+
+This provides a clearer overview of generated test assets.
+
+---
+
+# Architecture Improvements
+
+The project architecture has been refactored into dedicated layers.
+
+```text
+src/
+│
+├── builder/
+│   └── testcase_builder.py
+│
+├── templates/
+│   ├── template_registry.py
+│   ├── login_preconditions.py
+│   ├── login_steps.py
+│   ├── login_test_data.py
+│   └── login_postconditions.py
+│
+├── generator.py
+├── requirement_analyzer.py
+├── tc_id_service.py
+├── excel_exporter.py
+└── coverage_report.py
+```
+
+### Benefits
+
+* Better separation of concerns
+* Reduced code duplication
+* Higher maintainability
+* Easier testing
+* Improved scalability
+* Cleaner architecture
+
+---
+
+# Internal Refactoring
+
+* Centralized TestCase creation
+* Removed duplicated generation logic
+* Improved template management
+* Improved export layer
+* Improved project structure
+* Improved code readability
+* Added enterprise-ready reporting capabilities
+
+---
+
+# Planned Features (Version 1.5)
+
+* Registration template library
+* Password Reset template library
+* Category-specific Validation Templates
+* Analytics Dashboard
+* KPI Visualization
+* Stakeholder Reports
+* Executive Summary
+* Interactive Charts
+* Advanced Test Coverage Analytics
+
+---
+
