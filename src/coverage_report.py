@@ -6,10 +6,15 @@ def create_coverage_report(requirements, analyses, test_cases):
 
     COVERAGE_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
-    type_counter = Counter(tc.tc_type for tc in test_cases)
+   # Count generated test cases by their string representation
+    type_counter = Counter(
+    tc.tc_type.value
+    for tc in test_cases
+    )
+    # Collect all unique requirement categories detected during analysis.
+    categories = sorted(set(a.category.value for a in analyses))
 
-    categories = sorted(set(a.category for a in analyses))
-
+    # Calculate the overall requirement coverage percentage.
     coverage = (
         len(categories) / len(requirements) * 100
         if requirements else 0

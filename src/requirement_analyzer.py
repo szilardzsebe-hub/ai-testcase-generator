@@ -1,60 +1,27 @@
-from models import RequirementAnalysis
+from models import RequirementAnalysis, RequirementCategory
+from requirement_rules import REQUIREMENT_RULES
 
 
 def analyze_requirement(requirement):
+
     req = requirement.lower()
 
-    if "login" in req:
-        return RequirementAnalysis(
-            category="LOGIN",
-            keywords=["login", "username", "password"],
-            risks=[
-                "Invalid credentials",
-                "Locked account",
-                "Empty password"
-            ],
-            validations=[
-                "Username required",
-                "Password required",
-                "Username length"
-            ]
-        )
+    for category, rule in REQUIREMENT_RULES.items():
 
-    elif "password" in req:
-        return RequirementAnalysis(
-            category="PASSWORD_RESET",
-            keywords=["password", "email", "reset"],
-            risks=[
-                "Non-existing email",
-                "Expired reset link",
-                "Invalid reset token"
-            ],
-            validations=[
-                "Email required",
-                "Valid email format"
-                
-            ]
-        )
+        if any(keyword in req for keyword in rule["keywords"]):
 
-    elif "register" in req or "registration" in req:
-        return RequirementAnalysis(
-            category="REGISTRATION",
-            keywords=["register", "email", "password"],
-            risks=[
-                "Duplicate account",
-                "Weak password",
-                "Invalid email"
-            ],
-            validations=[
-                "Email required",
-                "Password strength",
-                "Username required"
-            ]
-        )
+            return RequirementAnalysis(
+                requirement=requirement,
+                category=category,
+                risks=rule["risks"],
+                validations=rule["validations"],
+                keywords=rule["keywords"]
+            )
 
     return RequirementAnalysis(
-        category="GENERIC",
-        keywords=[],
+        requirement=requirement,
+        category=RequirementCategory.GENERIC,
         risks=[],
-        validations=[]
+        validations=[],
+        keywords=[]
     )

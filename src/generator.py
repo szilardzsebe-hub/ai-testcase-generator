@@ -1,80 +1,104 @@
-from models import TestCase
+from builder.testcase_builder import create_test_case
+from templates.boundary_templates import BOUNDARY_TEMPLATES
 from requirement_analyzer import analyze_requirement
-from risk_templates import RISK_TEMPLATES
-from validation_templates import VALIDATION_TEMPLATES
-from positive_templates import POSITIVE_TEMPLATES
-from models import TestCase
+from templates.risk_templates import RISK_TEMPLATES
+from templates.validation_templates import VALIDATION_TEMPLATES
+from templates.positive_templates import POSITIVE_TEMPLATES
+from models import (
+    TestType,
+    Priority,
+    
+)
 
-
-def generate_positive_tests(analysis):
-
-    if analysis.category not in POSITIVE_TEMPLATES:
-        return []
-
-    tc_type, description, expected = POSITIVE_TEMPLATES[analysis.category]
-
-    return [
-        TestCase(
-            None,
-            tc_type,
-            description,
-            expected
-        )
-    ]
-def generate_risk_tests(analysis):
+# Generates multiple test cases from a collection of reusable templates.
+# Eliminates duplicated generation logic for Risk, Validation and similar
+# test case categories.
+def generate_from_template(
+    analysis,
+    template,
+    items,
+    priority,
+    tag,
+):
 
     tests = []
 
-    for risk in analysis.risks:
+    for item in items:
 
-        if risk in RISK_TEMPLATES:
+        if item not in template:
+            continue
 
-            tc_type, description, expected = RISK_TEMPLATES[risk]
+        tc_type, description, expected = template[item]
 
-            tests.append(
-                TestCase(
-                    None,
-                    tc_type,
-                    description,
-                    expected
-                )
+        tests.append(
+            create_test_case(
+                analysis=analysis,
+                title=description,
+                tc_type=tc_type,
+                priority=priority,
+                expected_result=expected,
+                tags=[tag],
             )
+        )
+
+    return tests
+def generate_positive_tests(analysis):
+    
+    if analysis.category not in POSITIVE_TEMPLATES:
+        return []
+    
+    tc_type,description, expected = POSITIVE_TEMPLATES[analysis.category]
+
+    return [
+        create_test_case(
+            analysis=analysis,
+            title=description,
+            tc_type=tc_type,
+            priority=Priority.MEDIUM,
+            expected_result=expected,
+            tags=["Positive"],
+        )
+    ]
+
+
+def generate_risk_tests(analysis):
+
+    return generate_from_template(
+        analysis=analysis,
+        template=RISK_TEMPLATES,
+        items=analysis.risks,
+        priority=Priority.HIGH,
+        tag="Risk",
+    )
 
     return tests
 def generate_validation_tests(analysis):
 
-    tests = []
+    return generate_from_template(
+        analysis=analysis,
+        template=VALIDATION_TEMPLATES,
+        items=analysis.validations,
+        priority=Priority.MEDIUM,
+        tag="Validation",
+    )
 
-    for validation in analysis.validations:
-
-        if validation in VALIDATION_TEMPLATES:
-
-            tc_type, description, expected = VALIDATION_TEMPLATES[validation]
-
-            tests.append(
-                TestCase(
-                    None,
-                    tc_type,
-                    description,
-                    expected
-                )
-            )
-
-    return tests
 def generate_boundary_tests(analysis):
 
-    if analysis.category == "LOGIN":
+    if analysis.category not in BOUNDARY_TEMPLATES:
+        return []
 
-        return [
-            TestCase(
-                None,
-                "Boundary",
-                "Verify login with maximum username length",
-                "Request handled correctly"
-            )
-        ]
+    tc_type, description, expected = BOUNDARY_TEMPLATES[analysis.category]
 
-    return []
+    return [
+        create_test_case(
+            analysis=analysis,
+            title=description,
+            tc_type=tc_type,
+            priority=Priority.MEDIUM,
+            expected_result=expected,
+            tags=["Boundary"],
+        )
+    ]
 
 def generate_test_cases(requirement):
 
@@ -89,3 +113,35 @@ def generate_test_cases(requirement):
 
     return test_cases
  
+# Generates multiple test cases from a collection of reusable templates.
+# Eliminates duplicated generation logic for Risk, Validation and similar
+# test case categories.
+def generate_from_template(
+    analysis,
+    template,
+    items,
+    priority,
+    tag,
+):
+
+    tests = []
+
+    for item in items:
+
+        if item not in template:
+            continue
+
+        tc_type, description, expected = template[item]
+
+        tests.append(
+            create_test_case(
+                analysis=analysis,
+                title=description,
+                tc_type=tc_type,
+                priority=priority,
+                expected_result=expected,
+                tags=[tag],
+            )
+        )
+
+    return tests

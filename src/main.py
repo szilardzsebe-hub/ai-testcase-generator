@@ -6,6 +6,10 @@ from requirement_analyzer import analyze_requirement
 from analysis_report import create_analysis_report
 from coverage_report import create_coverage_report
 
+from templates.login_test_data import LOGIN_TEST_DATA
+
+print(LOGIN_TEST_DATA)
+
 from analysis_report import (
     initialize_analysis_report,
     create_analysis_report
@@ -14,7 +18,6 @@ from config import (
     REQUIREMENTS_FILE,
     TEST_CASES_JSON,
     TEST_CASES_EXCEL,
-    ANALYSIS_REPORT_FILE
 )
 
 
@@ -47,7 +50,7 @@ for tc in all_test_cases:
     print()
     print(f"ID: {tc.tc_id}")
     print(f"Type: {tc.tc_type}")
-    print(f"Description: {tc.description}")
+    print(f"Description: {tc.title}")
     print(f"Expected Result: {tc.expected_result}")
 
 

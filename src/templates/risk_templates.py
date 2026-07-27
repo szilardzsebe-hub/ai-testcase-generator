@@ -1,55 +1,58 @@
-RISK_TEMPLATES = {
+from models import TestType
+
+RISK_TEMPLATES ={  
+    
 
     "Invalid credentials": (
-        "Negative",
+        TestType.RISK,
         "Verify login with invalid credentials",
         "Error message displayed"
     ),
 
     "Locked account": (
-        "Negative",
+        TestType.RISK,
         "Verify login with locked account",
         "Access denied"
     ),
 
     "Empty password": (
-        "Negative",
+        TestType.RISK,
         "Verify login with empty password",
         "Password is required"
     ),
 
     "Non-existing email": (
-        "Negative",
+        TestType.RISK,
         "Verify password reset with non-existing email",
         "Error message displayed"
     ),
 
     "Expired reset link": (
-        "Negative",
+        TestType.RISK,
         "Verify password reset with expired reset link",
         "Reset link expired"
     ),
 
     "Invalid reset token": (
-        "Negative",
+        TestType.RISK,
         "Verify password reset with invalid reset token",
         "Reset token is invalid"
     ),
 
     "Duplicate account": (
-        "Negative",
+        TestType.RISK,
         "Verify registration with duplicate account",
         "Registration is rejected"
     ),
 
     "Weak password": (
-        "Negative",
+        TestType.RISK,
         "Verify registration with weak password",
         "Password does not meet complexity requirements"
     ),
 
     "Invalid email": (
-        "Negative",
+        TestType.RISK,
         "Verify registration with invalid email",
         "Invalid email format"
     )
