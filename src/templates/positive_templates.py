@@ -1,4 +1,5 @@
-from models import TestType
+from src.models import TestType
+
 POSITIVE_TEMPLATES = {
 
     "LOGIN": (

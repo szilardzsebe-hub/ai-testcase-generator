@@ -1,14 +1,21 @@
-from models import RequirementAnalysis, RequirementCategory
-from requirement_rules import REQUIREMENT_RULES
+from src.models import RequirementAnalysis, RequirementCategory
+from src.requirement_rules import REQUIREMENT_RULES
 
 
 def analyze_requirement(requirement):
 
-    req = requirement.lower()
+    """
+    Analyzes a business requirement and classifies it into a supported
+    requirement category.
+
+    Returns a RequirementAnalysis object containing detected
+    risks, validations and keywords.
+    """
+    normalized_requirement = requirement.lower()
 
     for category, rule in REQUIREMENT_RULES.items():
 
-        if any(keyword in req for keyword in rule["keywords"]):
+        if any(keyword in normalized_requirement for keyword in rule["keywords"]):
 
             return RequirementAnalysis(
                 requirement=requirement,

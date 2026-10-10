@@ -1,10 +1,13 @@
-from templates.template_registry import (
+from src.templates.template_registry import (
     PRECONDITIONS_REGISTRY,
     TESTDATA_REGISTRY,
     STEPS_REGISTRY,
     POSTCONDITIONS_REGISTRY,
 )
-
+from src.models import (
+    TestCase,
+    AutomationCandidate,
+)
 
 def load_templates(category):
     """
@@ -23,12 +26,13 @@ def load_templates(category):
     }
 
 
-from models import (
-    TestCase,
-    AutomationCandidate,
-)
+
 
 def create_test_case(
+
+#Creates a fully populated TestCase object using reusable templates
+#and the analyzed requirement information.
+
     analysis,
     title,
     tc_type,
@@ -54,6 +58,3 @@ def create_test_case(
         automation_candidate=AutomationCandidate.YES,
         tags=tags,
     )
-# Represents the supported requirement categories.
-# Centralizing categories in an enumeration improves maintainability,
-# prevents typographical errors, and simplifies future extensions.

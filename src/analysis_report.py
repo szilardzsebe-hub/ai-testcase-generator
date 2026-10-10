@@ -1,4 +1,4 @@
-from config import ANALYSIS_REPORT_FILE
+from src.config import ANALYSIS_REPORT_FILE
 
 
 def create_analysis_report(requirement, analysis, index):

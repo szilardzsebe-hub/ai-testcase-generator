@@ -1,4 +1,4 @@
-from models import TestType
+from src.models import TestType
 VALIDATION_TEMPLATES = {
 
     "Username required": (

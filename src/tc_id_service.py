@@ -1,52 +1,33 @@
-import sqlite3
-from models import TestCase
-from config import DATABASE_FILE
 import json
+import sqlite3
 
-from models import (
+from src.config import DATABASE_FILE
+
+from database.sql_queries import (
+    CREATE_COUNTER_TABLE,
+    CREATE_TESTCASES_TABLE,
+    INITIALIZE_COUNTER,
+    SELECT_COUNTER,
+    UPDATE_COUNTER,
+    SELECT_TESTCASES_BY_REQUIREMENT,
+    INSERT_TESTCASE,
+)
+from src.models import (
     TestCase,
     TestType,
     Priority,
     AutomationCandidate,
 )
 
-
-
-
-
 def init_db():
     with sqlite3.connect(DATABASE_FILE) as conn:
         cur = conn.cursor()
 
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS tc_counter (
-            id INTEGER PRIMARY KEY CHECK (id = 1),
-            value INTEGER NOT NULL
-        )
-        """)
+        cur.execute(CREATE_COUNTER_TABLE)
 
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS generated_testcases (
-                tc_id TEXT PRIMARY KEY,
-                title TEXT,
-                requirement TEXT,
-                category TEXT,
-                tc_type TEXT,
-                priority TEXT,
-                preconditions TEXT,
-                test_data TEXT,
-                steps TEXT,
-                expected_result TEXT,
-                postconditions TEXT,
-                automation_candidate TEXT,
-                tags TEXT
-            )
-        """)
+        cur.execute(CREATE_TESTCASES_TABLE)
 
-        cur.execute("""
-            INSERT OR IGNORE INTO tc_counter (id, value)
-            VALUES (1, 0)
-        """)
+        cur.execute(INITIALIZE_COUNTER)
 
         conn.commit()
 
@@ -57,25 +38,10 @@ def get_existing_test_cases(requirement):
 
         normalized = requirement.strip().lower()
 
-        cur.execute("""
-            SELECT
-                tc_id,
-                title,
-                requirement,
-                category,
-                tc_type,
-                priority,
-                preconditions,
-                test_data,
-                steps,
-                expected_result,
-                postconditions,
-                automation_candidate,
-                tags
-            FROM generated_testcases
-            WHERE requirement = ?
-            ORDER BY tc_id
-        """, (normalized,))
+        cur.execute(
+            SELECT_TESTCASES_BY_REQUIREMENT,
+            (normalized,),
+)
 
         rows = cur.fetchall()
 
@@ -114,47 +80,15 @@ def get_existing_test_cases(requirement):
          
     ]
 
-def save_test_cases(requirement, test_cases):
-    print("=== NEW SAVE FUNCTION ===")
+def save_test_cases(requirement, test_cases):     
 
     with sqlite3.connect(DATABASE_FILE) as conn:
         cur = conn.cursor()
 
-        normalized = requirement.strip().lower()
-
         for tc in test_cases:
-            print("tc_id:", tc.tc_id, type(tc.tc_id))
-            print("title:", tc.title, type(tc.title))
-            print("requirement:", tc.requirement, type(tc.requirement))
-            print("category:", tc.category, type(tc.category), tc.category.value)
-            print("tc_type:", tc.tc_type, type(tc.tc_type), tc.tc_type.value)
-            print("priority:", tc.priority, type(tc.priority), tc.priority.value)
-            print("preconditions:", type(tc.preconditions))
-            print("test_data:", type(tc.test_data))
-            print("steps:", type(tc.steps))
-            print("expected_result:", tc.expected_result, type(tc.expected_result))
-            print("postconditions:", type(tc.postconditions))
-            print("automation:", tc.automation_candidate, type(tc.automation_candidate), tc.automation_candidate.value)
-            print("tags:", type(tc.tags))
+           
             cur.execute(
-                """
-                INSERT INTO generated_testcases (
-                    tc_id,
-                    title,
-                    requirement,
-                    category,
-                    tc_type,
-                    priority,
-                    preconditions,
-                    test_data,
-                    steps,
-                    expected_result,
-                    postconditions,
-                    automation_candidate,
-                    tags
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """,
+                INSERT_TESTCASE,
                 (
                     tc.tc_id,
                     tc.title,
@@ -170,8 +104,8 @@ def save_test_cases(requirement, test_cases):
                     tc.automation_candidate.value,
                     json.dumps(tc.tags),
                 ),
-            )
-
+)
+                
         conn.commit()
 
  
@@ -184,7 +118,7 @@ def get_or_generate_test_cases(requirement):
         print(f"Using cached test cases for: {requirement}")
         return existing
 
-    from generator import generate_test_cases
+    from src.generator import generate_test_cases
 
     generated = generate_test_cases(requirement)
 
@@ -193,21 +127,24 @@ def get_or_generate_test_cases(requirement):
     save_test_cases(requirement, generated)
 
     return generated
+
+
 def reserve_tc_ids(n):
 
     with sqlite3.connect(DATABASE_FILE) as conn:
         cur = conn.cursor()
 
-        cur.execute("SELECT value FROM tc_counter WHERE id = 1")
+        cur.execute(SELECT_COUNTER)
         current = cur.fetchone()[0]
 
         start = current + 1
         end = current + n
 
         cur.execute(
-            "UPDATE tc_counter SET value = ? WHERE id = 1",
-            (end,)
-        )
+            UPDATE_COUNTER,
+        (end,),
+)
+        
 
         conn.commit()
 

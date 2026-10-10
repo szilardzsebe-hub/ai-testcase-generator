@@ -1,12 +1,13 @@
 from collections import Counter
 
-from config import COVERAGE_REPORT_FILE
+from src.config import COVERAGE_REPORT_FILE
 
 def create_coverage_report(requirements, analyses, test_cases):
 
     COVERAGE_REPORT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
    # Count generated test cases by their string representation
+   
     type_counter = Counter(
     tc.tc_type.value
     for tc in test_cases

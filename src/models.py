@@ -1,24 +1,38 @@
 from enum import Enum
+"""
+Represents a generated software test case.
+
+This model is used across the entire application and serves as
+the canonical representation for exports, reporting and storage.
+"""
 
 
+"""
+    Defines the supported categories of generated test cases.
+"""
 class TestType(Enum):
     POSITIVE = "Positive"
     RISK = "Risk"
     BOUNDARY = "Boundary"
     VALIDATION = "Validation"
 
-
+"""
+    Defines the supported categories of generated test cases.
+"""
 class Priority(Enum):
     CRITICAL = "Critical"
     HIGH = "High"
     MEDIUM = "Medium"
     LOW = "Low"
 
-
+"""
+Defines the supported categories of generated test cases.
+"""
 class AutomationCandidate(Enum):
     YES = "Yes"
     NO = "No"
     PARTIAL = "Partial"
+
 
 class TestCase:
     def __init__(
@@ -51,6 +65,10 @@ class TestCase:
         self.automation_candidate = automation_candidate
         self.tags = tags
 
+    """ Converts the test case to a 
+    dictionary representation for easy export and reporting. 
+    """
+    
     def to_dict(self):
              return {
                 "Test Case ID": self.tc_id,
@@ -73,7 +91,7 @@ class TestCase:
 # business requirement and the generated test cases.
 
 class RequirementAnalysis:
-    def __init__(self,requirement,category,risks, validations, keywords):
+    def __init__(self, requirement, category, risks, validations, keywords):
         self.requirement = requirement
         self.category = category
         self.risks = risks

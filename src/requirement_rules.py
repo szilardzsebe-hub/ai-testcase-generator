@@ -1,4 +1,4 @@
-from models import RequirementCategory
+from src.models import RequirementCategory
 
 """
 Requirement Detection Rules

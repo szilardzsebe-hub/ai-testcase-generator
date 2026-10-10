@@ -1,4 +1,4 @@
-from models import TestType
+from src.models import TestType
 
 RISK_TEMPLATES ={  
     

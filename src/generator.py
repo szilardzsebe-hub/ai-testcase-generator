@@ -1,18 +1,15 @@
-from builder.testcase_builder import create_test_case
-from templates.boundary_templates import BOUNDARY_TEMPLATES
-from requirement_analyzer import analyze_requirement
-from templates.risk_templates import RISK_TEMPLATES
-from templates.validation_templates import VALIDATION_TEMPLATES
-from templates.positive_templates import POSITIVE_TEMPLATES
-from models import (
-    TestType,
-    Priority,
-    
-)
+from src.builder.testcase_builder import create_test_case
+from src.templates.boundary_templates import BOUNDARY_TEMPLATES
+from src.requirement_analyzer import analyze_requirement
+from src.templates.risk_templates import RISK_TEMPLATES
+from src.templates.validation_templates import VALIDATION_TEMPLATES
+from src.templates.positive_templates import POSITIVE_TEMPLATES
+from src.models import (Priority)
 
-# Generates multiple test cases from a collection of reusable templates.
-# Eliminates duplicated generation logic for Risk, Validation and similar
-# test case categories.
+""" Generates multiple test cases from a collection of reusable templates.
+Eliminates duplicated generation logic for Risk, Validation and similar
+test case categories.
+"""
 def generate_from_template(
     analysis,
     template,
@@ -42,8 +39,13 @@ def generate_from_template(
         )
 
     return tests
+
+
 def generate_positive_tests(analysis):
-    
+
+    # Generates positive test cases for a business requirement.
+    # Returns a list of generated test cases.
+
     if analysis.category not in POSITIVE_TEMPLATES:
         return []
     
@@ -63,6 +65,9 @@ def generate_positive_tests(analysis):
 
 def generate_risk_tests(analysis):
 
+    # Generates risk test cases for a business requirement.
+    # Returns a list of generated test cases.
+
     return generate_from_template(
         analysis=analysis,
         template=RISK_TEMPLATES,
@@ -71,8 +76,11 @@ def generate_risk_tests(analysis):
         tag="Risk",
     )
 
-    return tests
+  
 def generate_validation_tests(analysis):
+
+    # Generates validation test cases for a business requirement.
+    # Returns a list of generated test cases.
 
     return generate_from_template(
         analysis=analysis,
@@ -82,7 +90,11 @@ def generate_validation_tests(analysis):
         tag="Validation",
     )
 
+
 def generate_boundary_tests(analysis):
+
+    # Generates boundary test cases for a business requirement.
+    # Returns a list of generated test cases.
 
     if analysis.category not in BOUNDARY_TEMPLATES:
         return []
@@ -100,7 +112,14 @@ def generate_boundary_tests(analysis):
         )
     ]
 
+
 def generate_test_cases(requirement):
+    """
+     Generates all applicable test cases for a business requirement.
+
+     Performs requirement analysis and creates positive,
+     risk, validation and boundary test cases.
+    """
 
     analysis = analyze_requirement(requirement)
 
@@ -112,36 +131,4 @@ def generate_test_cases(requirement):
     test_cases.extend(generate_boundary_tests(analysis))
 
     return test_cases
- 
-# Generates multiple test cases from a collection of reusable templates.
-# Eliminates duplicated generation logic for Risk, Validation and similar
-# test case categories.
-def generate_from_template(
-    analysis,
-    template,
-    items,
-    priority,
-    tag,
-):
 
-    tests = []
-
-    for item in items:
-
-        if item not in template:
-            continue
-
-        tc_type, description, expected = template[item]
-
-        tests.append(
-            create_test_case(
-                analysis=analysis,
-                title=description,
-                tc_type=tc_type,
-                priority=priority,
-                expected_result=expected,
-                tags=[tag],
-            )
-        )
-
-    return tests

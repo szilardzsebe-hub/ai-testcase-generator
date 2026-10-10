@@ -11,11 +11,11 @@ and industry-specific templates.
 
 """
 
-from models import RequirementCategory
-from templates.login_preconditions import LOGIN_PRECONDITIONS
-from templates.login_test_data import LOGIN_TEST_DATA
-from templates.login_steps import LOGIN_STEPS
-from templates.login_postconditions import LOGIN_POSTCONDITIONS
+from src.models import RequirementCategory
+from src.templates.login_preconditions import LOGIN_PRECONDITIONS
+from src.templates.login_test_data import LOGIN_TEST_DATA
+from src.templates.login_steps import LOGIN_STEPS
+from src.templates.login_postconditions import LOGIN_POSTCONDITIONS
 
 PRECONDITIONS_REGISTRY = {
     RequirementCategory.LOGIN: LOGIN_PRECONDITIONS,
@@ -33,9 +33,7 @@ POSTCONDITIONS_REGISTRY = {
     RequirementCategory.LOGIN: LOGIN_POSTCONDITIONS,
 }
 
-# Represents the supported requirement categories.
-# Centralizing categories in an enumeration improves maintainability,
-# prevents typographical errors, and simplifies future extensions.
+
 
 
     

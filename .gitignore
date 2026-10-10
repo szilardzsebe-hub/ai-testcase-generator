@@ -14,3 +14,17 @@ data/tc.db
 #Output
 output/
 database/*.db
+
+# Local backups and generated Python files
+src_backup/
+.pytest_cache/
+.mypy_cache/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+database/*.db
+database/*.db.backup
+src_backup/
